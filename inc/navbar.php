@@ -80,7 +80,7 @@
           <a class="navbar-item" href="index.php?vista=Pedidos_new">
             Nueva
           </a>
-          <a class="navbar-item">
+          <a class="navbar-item" href="index.php?vista=pedidos_list">
             Lista
           </a>
           <a class="navbar-item">
