@@ -2,15 +2,14 @@
 require_once "main.php";
 
 //TODO: almacenando datos
-$idcliente = limpiar_cadena($_POST['id_cliente']);
+$cliente_id = limpiar_cadena($_POST['usuario_id']);
+$nombre = limpiar_cadena($_POST['id_cliente']);
 
-$nombre_cli = limpiar_cadena($_POST['cliente_nombre']);
 
 
 //TODO: verificar campos obligatorios
 if (
-    $idcliente == "" || $nombre_cli == "" 
-) {
+  $cliente_id == "" || $nombre== "" ) {
     echo '
     <div class="notification is-danger is-light">
              <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -19,53 +18,42 @@ if (
     exit();
 }
 
-if ($nombre_cli != "") {
-    if (filter_var($nombre_cli, FILTER_VALIDATE_EMAIL)) {
-        $check_nombre = conexion();
-        $check_nombre = $check_nombre->query("SELECT email FROM clientes WHERE email='$nombre_cli'");
-        if ($check_nombre->rowCount() > 0) {
-            echo '
-                <div class="notification is-danger is-light">
-                    <strong>¡Ocurrio un error inesperado!</strong><br>
-                    El correo electrónico ingresado ya se encuentra registrado, por favor elija otro
-                </div>
-            ';
-            exit();
-        }
-        $check_nombre = null;
-    } else {
-        echo '
-            <div class="notification is-danger is-light">
-                <strong>¡Ocurrio un error inesperado!</strong><br>
-                Ha ingresado un correo electrónico no valido
-            </div>
-        ';
-        exit();
-    }
-}
 
-$check_clientes = conexion();
-$check_clientes = $check_cliente->query("SELECT id_cliente FROM clientes WHERE id_cliente='$idcliente'");
-if ($check_clientes->rowCount() > 0) {
+$check_cliente_id = conexion();
+$check_cliente_id = $check_cliente_id->query("SELECT id_cliente FROM clientes WHERE id_cliente='$cliente_id'");
+if ($check_cliente_id->rowCount() > 0) {
     echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
-                El cliente ingresada ya se encuentra registrada, por favor digite otra
+                La cedula ingresada ya se encuentra registrada, por favor digite otra
             </div>
         ';
     exit();
 }
-$check_clientes = null;
+$check_cliente_id = null;
+
+$check_nombre= conexion();
+$check_nombre = $check_nombre->query("SELECT nombre FROM clientes WHERE nombre='$nombre'");
+if ($check_nombre->rowCount() > 0) {
+    echo '
+            <div class="notification is-danger is-light">
+                <strong>¡Ocurrio un error inesperado!</strong><br>
+                El username ingresado ya se encuentra registrado, por favor digite otro
+            </div>
+        ';
+    exit();
+}
+$check_nombre = null;
 
 //TODO:guardar datos en la bdd
-$guardar_clientes = conexion();
-$guardar_clientes = $guardar_clientes->prepare("INSERT INTO `clientes`(`id_cliente`, `nombre`) 
-VALUES (:id_cliente,:nombre)");
+$guardar_usuario = conexion();
+$guardar_usuario = $guardar_usuario->prepare("INSERT INTO `clientes`( `id_cliente`, `nombre`) 
+VALUES (:nombre)");
 
 $marcadores = [
-    ":cliente" => $cliente_cli,
-    ":nombre" => $nombre_cli,
-   
+  ":nombre" => $nombre,
+
+ 
 ];
 $guardar_clientes->execute($marcadores);
 
@@ -77,7 +65,7 @@ if ($guardar_clientes->rowCount() == 1) {
     <button class="delete" aria-label="delete"></button>
   </div>
   <div class="message-body">
-  El cliente ha sido registrado con exito
+  El Usuario ha sido registrado con exito
   </div>
 </article>
         ';

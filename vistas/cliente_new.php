@@ -8,23 +8,20 @@
     <div class="form-rest mb-6 mt-6"></div>
 
     <form action="./php/cliente_guardar.php" method="POST" class="FormularioAjax" autocomplete="off">
-        <div class="columns" style="width: 51%">
-        <div class="column">
-                <div class="control">
-                    <label>ID</label>
-                    <input class="input" type="text" name="cliente_cedula" pattern="[0-9]+" minlength="1" maxlength="10" required>
-                </div>
-            </div>
-
-            
-        </div>
-        <div class="columns">
-        <div class="column">
-                <div class="control">
-                    <label>Nombres</label>
-                    <input class="input" type="text" name="cliente_nombre" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,40}"  maxlength="40" required>
-                </div>
-            </div>
+    <div class="columns">
+		  	<div class="column">
+		    	<div class="control">
+					<label>ID Cliente</label>
+                    <input class="input" type="text" name="usuario_id" pattern="[0-9]+" minlength="1" maxlength="10" required>
+				</div>
+		  	</div> 
+              <div class="column">
+		    	<div class="control">
+					<label>Nombre</label>
+                    <input class="input" type="text" name="id_cliente" pattern="[A-Za-z0-9]+{3,100}" maxlength="100" required>
+				</div>
+		  	</div>
+		</div>
             <div class="column">
            
 

@@ -1,5 +1,7 @@
 <?php
 require_once "main.php";
+$id_pizza = limpiar_cadena($_POST['usuario_id']);
+$id_cliente= limpiar_cadena($_POST['cliente_id']);
 $fecha_pedido = limpiar_cadena($_POST['fecha_pedido']);
 
 //TODO: verificar campos obligatorios
@@ -15,18 +17,20 @@ if (
 }
 
 //TODO:guardar datos en la bdd
-$guardar_servicio= conexion();
-$guardar_servicio= $guardar_servicio->prepare("INSERT INTO `pedidos`(`id_pedido`, `id_pizza`, `id_cliente` `fecha_pedido`) 
-VALUES (:fecha_pedido)");
+$guardar_pedidos= conexion();
+$guardar_pedidos= $guardar_pedidos->prepare("INSERT INTO `pedidos`( `id_pizza`, `id_cliente` `fecha_pedido`) 
+VALUES (:id_pizza, id_cliente; :fecha_pedido )");
 
 $marcadores = [
-    ":fecha_pedido" => $nombre_servicio,
+  ":id_pizza" => $id_pizza,
+  ":id_cliente" => $id_cliente,
+  ":fecha_pedido" => $fecha_pedido,
 
 
 ];
-$guardar_servicio->execute($marcadores);
 
-if ($guardar_servicio->rowCount() == 1) {
+
+if ($guardar_pedidos->rowCount() == 1) {
     echo '
     <article class="message is-success">
   <div class="message-header">
@@ -34,7 +38,7 @@ if ($guardar_servicio->rowCount() == 1) {
     <button class="delete" aria-label="delete"></button>
   </div>
   <div class="message-body">
-  El servicio ha sido registrado con exito
+  El pedidoha sido registrado con exito
   </div>
 </article>
         ';
@@ -46,7 +50,7 @@ if ($guardar_servicio->rowCount() == 1) {
       <button class="delete" aria-label="delete"></button>
     </div>
     <div class="message-body">
-      Error al guardar el servicio, intente nuevamente
+      Error al guardar el pedido, intente nuevamente
     </div>
   </article>
         ';
