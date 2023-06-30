@@ -34,7 +34,7 @@
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          PIZZAS
+          Pizza
         </a>
 
         <div class="navbar-dropdown">

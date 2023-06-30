@@ -2,12 +2,14 @@
 require_once "main.php";
 
 //TODO: almacenando datos
-$nombre = limpiar_cadena($_POST['nombre_producto']);
+$nombre = limpiar_cadena($_POST['nombre_ingrediente']);
+$pizza_id= limpiar_cadena($_POST['pizza_id']);
+
 
 
 //TODO: verificar campos obligatorios
 if (
-  $nombre == "") {
+  $nombre == "" || $pizza_id== "" ) {
     echo '
     <div class="notification is-danger is-light">
              <strong>¡Ocurrio un error inesperado!</strong><br>
@@ -17,40 +19,54 @@ if (
 }
 
 
-$check_ingredientes = conexion();
-$check_ingredientes = $check_ingredientes->query("SELECT nombre FROM inventarios WHERE nombre='$nombre'");
-if ($check_ingredientes->rowCount() > 0) {
+$check_id = conexion();
+$check_id = $check_id->query("SELECT nombre FROM ingredientes WHERE nombre='$nombre'");
+if ($check_id->rowCount() > 0) {
     echo '
             <div class="notification is-danger is-light">
                 <strong>¡Ocurrio un error inesperado!</strong><br>
-                los ingredientes ya se encuentran registrados, por favor digite otro
+                La pizza ingresada ya se encuentra registrada, por favor digite otra
             </div>
         ';
     exit();
 }
-$check_producto = null;
+$check_id = null;
 
+$check_pizza = conexion();
+$check_pizza = $check_pizza->query("SELECT id_pizza FROM ingredientes WHERE id_pizza='$pizza_id'");
+if ($check_pizza->rowCount() > 0) {
+    echo '
+            <div class="notification is-danger is-light">
+                <strong>¡Ocurrio un error inesperado!</strong><br>
+                El nombre ingresado ya se encuentra registrado, por favor digite otro
+            </div>
+        ';
+    exit();
+}
+$check_pizza = null;
 
 //TODO:guardar datos en la bdd
-$guardar_usuario = conexion();
-$guardar_usuario = $guardar_usuario->prepare("INSERT INTO `ingredientes`(`nombre`) 
-VALUES (:nombre)");
+$guardar_ingreiente= conexion();
+$guardar_ingreiente = $guardar_ingreiente->prepare("INSERT INTO `ingredientes`( `id_ingredientes`, `nombre`, `id_pizza`) 
+VALUES (:nombre, :id_pizza)");
 
 $marcadores = [
   ":nombre" => $nombre,
+  ":id_pizza" => $pizza_id,
+
  
 ];
-$guardar_usuario->execute($marcadores);
+$guardar_ingreiente->execute($marcadores);
 
-if ($guardar_usuario->rowCount() == 1) {
+if ($guardar_ingreiente->rowCount() == 1) {
     echo '
     <article class="message is-success">
   <div class="message-header">
-    <p>Cliente registrado</p>
+    <p>Ingredientes registrado</p>
     <button class="delete" aria-label="delete"></button>
   </div>
   <div class="message-body">
-  El ingrediente ha sido registrado con exito
+  El Ingrediente ha sido registrado con exito
   </div>
 </article>
         ';
@@ -62,9 +78,9 @@ if ($guardar_usuario->rowCount() == 1) {
       <button class="delete" aria-label="delete"></button>
     </div>
     <div class="message-body">
-      Error al guardar el ingrediente, intente nuevamente
+      Error al guardar el Ingrediente, intente nuevamente
     </div>
   </article>
         ';
 }
-$guardar_usuario=null;
+$guardar_ingreiente=null;
